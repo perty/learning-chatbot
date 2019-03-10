@@ -10,3 +10,4 @@ There first thing is to take out the classes, is that safe?
 
 Many issues in the code, like duplication. How would you approach those?
 
+The "brain" has both an interface and a protocol. Describe those!
