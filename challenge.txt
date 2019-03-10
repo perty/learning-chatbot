@@ -1,0 +1,152 @@
+
+
+    The task is to create a chatbot with whom you can spend your time discussing your deepest thoughts with. Create a
+    chatbot with an AI that learns from your input. Your bot should inspire you to releave your darkest inner truths.
+
+Inspiration:
+
+    http://en.wikipedia.org/wiki/Chatterbot
+
+    http://io9.com/5901579/10-tricks-that-chatbots-use-to-make-you-believe-theyre-human
+
+Rules:
+
+    You can use any programming language.
+    Your programs should not take any input from filename, network or anything else but the user input.
+    There can be no preset vocabulary, the bot should learn everything it knows from the user input, and the discussion
+    can be about anything.
+
+Mandatory criterias:
+
+    This is not Code-golf, but please keep it simple, sourcecode size should correspond to programming language,
+    meaning: GolfScript=short, BF=long, other=Use common sense. Use the example code as a reference, your code may be
+    double that size, but then it better be good.
+    Your program can not start to lag (5-10 seconds delay) within the first 1000 sentences.
+    A reasonable discussion should take form within about 20-30 sentences.
+    Your algorithm should differ, in logic, from the example code as much as it can.
+
+Optional bonus judging criterias:
+
+    The better bot learning algorithm, the better program.
+    No tennis match, i.e conversation does not follow the strict: “user > computer > user”-loop turns.
+    Less mimic, bot behaviour is different from user behaviour, separating the perception of the bot attitude from the
+    user attitude.
+    Sense different changing moods, for example: talkative, taciturn, optimistic, pessimistic.
+    A way of saving and loading the "brain", so that you can continue your discussion with your bot another day.
+
+Example code in c++ for inspiration only:
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+vector<string> words;
+vector<int> weight1;
+vector<int> weight2;
+int oldbw;
+
+int collect(string const& i, int w1, int w2)
+{
+    istringstream iss(i), iss2(i);
+    copy(istream_iterator<string>(iss),
+             istream_iterator<string>(),
+             back_inserter(words));
+    words.insert(words.end(), "\n");
+    int a = distance(istream_iterator<string>(iss2), istream_iterator<string>());
+    for(int c=0;c<=a;c++) weight1.insert(weight1.end(), w1);
+    for(int c=0;c<=a;c++) weight2.insert(weight2.end(), w2);
+    return a;
+}
+
+void answer(int c)
+{
+    string op;
+    int bs=0,bw=0,cs,si,searchsize,cc, c2;
+    cout << "BRAIN: ";
+
+    for(int iwrd = words.size()-c; iwrd >= 0; iwrd--)
+    {
+        searchsize = words.size()/4;
+        cs = 0; si=searchsize;
+        for(int iw = words.size()-2; (iw >= 0 && si!=0); iw--)
+        {
+            cc = iwrd-searchsize+si;
+            if (cc>=0) if (words[cc]!="\n" && words[cc]==words[iw]) cs += si*(weight2[cc]-weight1[cc]);
+            si--;
+        }
+        if(cs>=bs && iwrd<(int)words.size()*0.9 && abs(iwrd-oldbw)>((int)words.size()/5))
+        {bs=cs; bw = iwrd;}
+    }
+
+    oldbw=bw;
+
+    if(bw<0)bw=0;
+    for(c2=bw; c2< (int)words.size()-1;c2++) if(words[c2]=="\n") {bw=c2+1;break;}
+
+    for(c2=0;(bw+c2) < (int)words.size();c2++)
+        if(words[bw+c2]!="\n") op += words[bw+c2] + " "; else break;
+
+    c2=0;
+    while(c>=0)
+    {
+        if(bw-(++c2)>=0)
+        {
+            if(weight1[bw-c2]>0) { weight1[bw-c2]--; c--; }
+        } else c=-1;
+
+        if(bw+c2>=0)
+        {
+            if(weight2[bw+c2]>0) { weight2[bw+c2]--; c--; }
+        } else c=-1;
+    }
+
+    collect(op,3,5);
+    cout << op << "\n  YOU: ";
+}
+
+int main() {
+    string i;
+    oldbw=0;
+    do { getline(cin, i); answer(collect(i,5,3)+1);} while(i.compare("exit")!=0);
+    return 0;
+}
+
+Sample dialog:
+
+Hello there, crazy bot!
+BRAIN: Hello there, crazy bot!
+  YOU: I am not a crazy bot, I am pure human (and some cheese).
+BRAIN: I am not a crazy bot, I am pure human (and some cheese).
+  YOU: What cheese are you?
+BRAIN: I am not a crazy bot, I am pure human (and some cheese).
+  YOU: You did tell me that already.
+BRAIN: You did tell me that already.
+  YOU: I did not, stop bugging me, you crazy bot!
+BRAIN: I am not a crazy bot, I am pure human (and some cheese).
+  YOU: Are you a human? How come?
+BRAIN: You did tell me that already.
+  YOU: I will hunt you down the longests roads
+BRAIN: What cheese are you?
+  YOU: I am a pink cheese, with some butter. That makes sense to me.
+BRAIN: You did tell me that already.
+  YOU: Stop telling me that, who are you?
+BRAIN: What cheese are you?
+  YOU: I tell you what cheese I am if you tell me your name!
+BRAIN: What cheese are you?
+  YOU: Oh my god! This is leading towards nowhere.
+BRAIN: What cheese are you?
+  YOU: Oh no, my head hurts. Are you a crazy bot or not?
+BRAIN: Are you a human? How come?
+  YOU: That is enough! Can we talk about something more funny?
+BRAIN: Oh no, my head hurts. Are you a crazy bot or not?
+  YOU: I am HUMAN!
+BRAIN: What cheese are you?
+  YOU:
+
+This is a popularity-contest, the answer with the most upvotes by 2014-04-01 wins!
+
+Good luck, have fun!
