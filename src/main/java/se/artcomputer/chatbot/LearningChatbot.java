@@ -1,3 +1,4 @@
+package se.artcomputer.chatbot;
 /* "Zero"-knowledge Learning ChatBot  Copyright (C) 2014-2016 Daniel Boston (ProgrammerDan)
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
