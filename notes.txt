@@ -1,0 +1,12 @@
+Can be used as an refactoring exercise.
+
+How can we can deterministic tests when there is a random generator in play?
+
+What would a refactor plan look like?
+
+There many maps, collections and manipulations of those. How could we make this more readable by good abstractions?
+
+There first thing is to take out the classes, is that safe?
+
+Many issues in the code, like duplication. How would you approach those?
+
